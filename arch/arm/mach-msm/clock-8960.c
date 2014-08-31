@@ -3406,6 +3406,7 @@ static struct clk_freq_tbl clk_tbl_gfx3d[] = {
 	F_GFX3D(266667000, pll2,  1,  3),
 	F_GFX3D(320000000, pll2,  2,  5),
 	F_GFX3D(400000000, pll2,  1,  2),
+	F_GFX3D(409500000, pll15, 1,  2),
 	F_GFX3D(450000000, pll15, 1,  2),
 	F_END
 };
@@ -3428,6 +3429,8 @@ static struct clk_freq_tbl clk_tbl_gfx3d_8960[] = {
 	F_GFX3D(300000000, pll3, 1,  4),
 	F_GFX3D(320000000, pll2, 2,  5),
 	F_GFX3D(400000000, pll2, 1,  2),
+	F_GFX3D(409500000, pll15, 1,  2),
+  	F_GFX3D(450000000, pll15, 1,  2),
 	F_END
 };
 
@@ -3439,8 +3442,8 @@ static unsigned long fmax_gfx3d_8064ab[MAX_VDD_LEVELS] __initdata = {
 
 static unsigned long fmax_gfx3d_8064[MAX_VDD_LEVELS] __initdata = {
 	[VDD_DIG_LOW]     = 128000000,
-	[VDD_DIG_NOMINAL] = 325000000,
-	[VDD_DIG_HIGH]    = 400000000
+	[VDD_DIG_NOMINAL] = 320000000,
+	[VDD_DIG_HIGH]    = 450000000
 };
 
 static unsigned long fmax_gfx3d_8930[MAX_VDD_LEVELS] __initdata = {
@@ -6690,10 +6693,7 @@ static void __init reg_init(void)
 			writel_relaxed(0x2B, PRNG_CLK_NS_REG);
 	}
 
-	if (cpu_is_apq8064()) {
-		
-		configure_sr_pll(&pll15_config, &pll15_regs, 0);
-	} else if (cpu_is_apq8064ab()) {
+	if (cpu_is_apq8064() || cpu_is_apq8064ab()) {
 		
 		pll15_config.l = 0x21 | BVAL(31, 7, 0x620);
 		pll15_config.m = 0x1;
